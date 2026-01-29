@@ -8,43 +8,15 @@
 
 ### Usage:
 1. NECESSARY! First of all the package sssd should be installed and configured on the target server (remote host)
-2. NECESSARY! On the ansible controller one of two thing is required:
-a) "interpreter_python = python3" set in the [defaults] section of ansible.cfg
-b) your ansible role should contain a var "ansible_python_interpreter: /usr/bin/python3" set
-
-example of "a)":
-```
-[defaults]
-log_path                = ./ansible.log
-fact_caching_connection = ./out
-host_key_checking       = False
-ask_pass                = False
-callback_whitelist      = profile_tasks
-stdout_callback         = full_skip
-vault_password_file     = ~/.ssh/ansible.yml
-interpreter_python       = python3
-```
-example of "b)":
-```ansible
-- hosts: "{{ srv | default('none') }}"
-  tasks:
-    - name: add a single domain group
-      sssd:
-        domain_group: lalalagroup
-        group_state: present
-        become: yes
-        vars: 
-          ansible_python_interpreter: /usr/bin/python3
-```
-3. NECESSARY! Create dir named "library" in your project and place sssd.py there
-4. Run your play
+2. NECESSARY! Create dir named "library" in your project and place sssd.py there
+3. Run your play
 
 
 
 
 ### Debugging:
 #### Local debugging:
-connect to server with ssh
+connect to managed server with ssh, switch to user root
 install package ansible
 install package `sssd` and configure /etc/sssd/sssd.conf 
 check groups already added to realm using `realm list | grep -i permitted-gr`
@@ -153,11 +125,11 @@ realm: Specifying deny without --all is deprecated. Use realm permit --withdraw
 - PlaceDefaultConfigClass not implemented yet
 - JoinOrLeaveDomainClass not implemented yet
 - AddOrDelGroupClass cant handle blank stdout of 'realm list' (when "server is not added to a domain" = "empty /etc/sssd/sssd.conf" ) -> 'realm permit -g somegroup' returns rc=1 and stdout "realm: Couldn't find a configured realm"
-- AddOrDelGroupClass cant work with python2 remote-host interpreter because of usage imported 'shutil' (which can serve with python3 only)
+(closed) - AddOrDelGroupClass cant work with python2 remote-host interpreter because of usage imported 'shutil' (which can serve with python3 only)
 - AddOrDelGroupClass cant handle multiple groups pass 
 - AddOrDelGroupClass cant handle invalid symbols (when you pass only a comma to domain_group like this `domain_group=,`)
 - AddOrDelGroupClass cant handle exception when you pass empty var domain_group like this  `domain_group=`
-- error if remote-host interpreter is python2
+(closed) - ansible.module_utils.basic import error if interpreter is python2 (when you use  Local debugging)
 - something else. I forgot ¯\_(ツ)_/¯
 
 

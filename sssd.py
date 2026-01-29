@@ -4,30 +4,18 @@
 
 
 
-
-#KEYWORDHERE! This module works only when played with python3 interpreter at the target host. You MUST set in the  local ansible.cfg an "interpreter = python3" OR set var "ansible_python_interpreter: python3" in the play/role
-
 #"the default" - ansible class import (https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html)
 from __future__ import (absolute_import, division, print_function)
 
 
 #"the default" - ansible class import (https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html)
-#KEYWORDHERE!  This still DOES NOT work WHEN you start this module with `python2 library/sssd.py json_to_local_check-addgrp.json`
 from ansible.module_utils.basic import AnsibleModule
-#The error looks llike that:
-# username@SERVERNAME myfolder $ python2 library/sssd.py json_to_local_check-addgrp.json
-# Traceback (most recent call last):
-#   File "library/sssd.py", line 404, in <module>
-#     main()
-#   File "library/sssd.py", line 251, in main
-#      from ansible.module_utils.basic import AnsibleModule
-# ImportError: No module named ansible.module_utils.basic
-# username@SERVERNAME myfolder $
+
 
 
 import subprocess
 import os
-import shutil
+#import shutil
 
 #"the default" - ansible class import (https://docs.ansible.com/ansible/latest/dev_guide/developing_modules_general.html)
 __metaclass__ = type
@@ -98,6 +86,18 @@ EXAMPLES = r'''
 # remove server from an active directory domain (will delete an /etc/sssd/sssd.conf and keytab too!!!) - same as a: `realm leave -U {{ admin_user }}`
 '''
 
+#function to detect using python2 or python3  if binary "realm" is in  places, described in PATH 
+def which(cmd):
+    path = os.environ.get('PATH', '')
+    for directory in path.split(os.pathsep):
+        if not directory:
+            continue
+        candidate = os.path.join(directory, cmd)
+        if os.path.isfile(candidate) and os.access(candidate, os.X_OK):
+            return candidate
+    return None
+
+
 #Let's describe our CLASSes
 class AddOrDelGroupClass(object):
     def __init__(self, module):
@@ -122,9 +122,7 @@ class AddOrDelGroupClass(object):
 
     def IsGroupAlreadyExistsFunc(self):
         #Here we detect if group is added to realm on the server or not
-        # KEYWORDHERE! This works when "interpreter_python = python3" in local ansible.cfg
-        # KEYWORDHERE! This DOES NOT work when "interpreter_python = auto_silent" in local ansible.cfg
-        utilpath = shutil.which("realm")
+        utilpath = which("realm")
         if utilpath:
             checkargstring = 'realm list | grep permitted-groups'
             listofgroups = subprocess.check_output(checkargstring, shell=True).decode('utf-8').strip().split('\n')
