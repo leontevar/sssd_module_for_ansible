@@ -157,4 +157,11 @@ realm: Specifying deny without --all is deprecated. Use realm permit --withdraw
 - AddOrDelGroupClass cant handle multiple groups pass 
 - AddOrDelGroupClass cant handle invalid symbols (when you pass only a comma to domain_group like this `domain_group=,`)
 - AddOrDelGroupClass cant handle exception when you pass empty var domain_group like this  `domain_group=`
+- error if remote-host interpreter is python2
 - something else. I forgot ¯\_(ツ)_/¯
+
+
+### known bugs
+```bash
+
+```
