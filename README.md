@@ -17,7 +17,7 @@
 ### Debugging:
 #### Local debugging:
 connect to managed server with ssh, switch to user root
-install package ansible
+install package `ansible`
 install package `sssd` and configure /etc/sssd/sssd.conf 
 check groups already added to realm using `realm list | grep -i permitted-gr`
 clone project and step to project folder
