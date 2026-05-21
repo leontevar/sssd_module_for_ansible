@@ -125,11 +125,11 @@ realm: Specifying deny without --all is deprecated. Use realm permit --withdraw
 - PlaceDefaultConfigClass not implemented yet
 - JoinOrLeaveDomainClass not implemented yet
 - AddOrDelGroupClass cant handle blank stdout of 'realm list' (when "server is not added to a domain" = "empty /etc/sssd/sssd.conf" ) -> 'realm permit -g somegroup' returns rc=1 and stdout "realm: Couldn't find a configured realm"
-(closed) - AddOrDelGroupClass cant work with python2 remote-host interpreter because of usage imported 'shutil' (which can serve with python3 only)
+- (solved) AddOrDelGroupClass cant work with python2 remote-host interpreter because of usage imported 'shutil' (which can serve with python3 only)
 - AddOrDelGroupClass cant handle multiple groups pass 
 - AddOrDelGroupClass cant handle invalid symbols (when you pass only a comma to domain_group like this `domain_group=,`)
 - AddOrDelGroupClass cant handle exception when you pass empty var domain_group like this  `domain_group=`
-(closed) - ansible.module_utils.basic import error if interpreter is python2 (when you use  Local debugging)
+- (solved) ansible.module_utils.basic import error if interpreter is python2 (when you use  Local debugging)
 - something else. I forgot ¯\_(ツ)_/¯
 
 
